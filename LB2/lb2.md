@@ -11,40 +11,71 @@
 ### Внесені зміни у вихідну логіку моделі, за варіантом:
 
 **Позитивний вплив електростанцій на ймовірність появи нових людей:** поблизу power-plant народжуваність збільшується.
+Було реалізовано механізм, за яким народжуваність (birth-rate) збільшується у клітинах, розташованих близько до електростанцій.
 Для цього:
 1. Додати обчислення відстані до найближчої електростанції
-Створюємо процедуру:
+Додано процедуру:
 <pre>
 to-report distance-to-powerplant
   let plants patches with [is-power-plant?]
   if any? plants [
     report min [distance myself] of plants
   ]
-  report 999 ; якщо електростанцій немає
+  report 999
 end
 </pre>
-2. Підсилення birth-rate поблизу power-plant
-У процедурі reproduce додаємо коефіцієнт:
+2. Змінюємо процедуру reproduce:
+Змінюємо існуючу процедуру:
 <pre>
-to reproduce
+to reproduce  ;; person procedure
+  if health > 4 and random-float 1 < birth-rate [
+    hatch-people 1 [
+      set health 5
+    ]
+  ]
+end
+</pre>
+на нову:
+<pre>
+to reproduce  ;; person procedure
   let dist distance-to-powerplant
-  
-  ;; Чим ближче до електростанції, тим більша ймовірність народження
   let boost 1
-  if dist < 5  [ set boost 2 ]     ;; вдвічі частіше
-  if dist < 3  [ set boost 3 ]     ;; утричі частіше
-  
-  if random-float 1 < birth-rate * boost [
-      hatch 1 [
-        set health 5
-        setxy random-pxcor random-pycor
-      ]
+
+  ;; збільшуємо birth-rate поблизу power-plant
+  if dist < 5 [ set boost 2 ]
+  if dist < 3 [ set boost 3 ]
+
+  if health > 4 and random-float 1 < (birth-rate * boost) [
+    hatch-people 1 [
+      set health 5
+      set color black
+    ]
   ]
 end
 </pre>
 Це гарантує, що люди активно з’являються саме навколо електростанцій.
  
+**Збільшено вірогідність висадки дерев у клітинах поблизу електростанцій:** чим ближче до power-plant, тим більша імовірність посадки дерева.
+Було реалізовано механізм, за яким народжуваність (plantiong-rate) збільшується у клітинах, розташованих близько до електростанцій.
+Для цього:
+Змінюємо процедуру maybe-plant таким чином:
+<pre>
+to maybe-plant  ;; person procedure
+  let dist distance-to-powerplant
+  let chance planting-rate
+  
+  ;; збільшуємо шанс посадки дерева, якщо близько до power-plant
+  if dist < 5 [ set chance planting-rate * 2 ]
+  if dist < 3 [ set chance planting-rate * 3 ]
 
+  if random-float 1 < chance [
+    hatch-trees 1 [
+      set health 5
+      set color green
+    ]
+  ]
+end
+</pre>
 <br>
 
 ### Внесені зміни у вихідну логіку моделі, на власний розсуд:
@@ -53,8 +84,6 @@ end
 
 ![Скріншот моделі в процесі симуляції](example-model.png)
 
-Фінальний код моделі та її інтерфейс доступні за [посиланням](example-model.nlogo). *// якщо вносили зміни до інтерфейсу середовища моделювання - то експорт потрібен у форматі nlogo, як тут. Інакше, якщо змінювався лише код логіки моделі, достатньо викласти лише його, як [тут](example-model-code.html),якщо експортовано з десктопної версії NetLogo, або окремим текстовим файлом, шляхом копіпасту з веб-версії*.
-<br>
 
 ## Обчислювальні експерименти
 *// тут повинен бути наведений опис одного експерименту, за аналогією з першої л/р.* 
