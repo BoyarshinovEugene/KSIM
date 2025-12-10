@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE search SYSTEM "behaviorsearch.dtd">
+<search>
+    <bsearchVersionNumber>1,10</bsearchVersionNumber>
+    <modelInfo>
+        <modelFile>C:\Program Files\NetLogo 7.0.2\models\Curricular Models\Urban Suite\Urban Suite - Pollution.nlogox</modelFile>
+        <modelSetupCommands>setup</modelSetupCommands>
+        <modelStepCommands>go</modelStepCommands>
+        <modelStopCondition/>
+        <modelStepLimit>30</modelStepLimit>
+        <modelMetricReporter>count people</modelMetricReporter>
+        <modelMeasureIf>true</modelMeasureIf>
+    </modelInfo>
+    <fitnessInfo>
+        <fitnessMinimized>false</fitnessMinimized>
+        <fitnessCollecting>AT_FINAL_STEP</fitnessCollecting>
+        <fitnessSamplingReplications>2</fitnessSamplingReplications>
+        <fitnessCombineReplications>MEAN</fitnessCombineReplications>
+    </fitnessInfo>
+    <searchSpace>
+        <paramSpec>["power-plants" [0 1 20]]</paramSpec>
+        <paramSpec>["initial-population" [0 10 100]]</paramSpec>
+        <paramSpec>["birth-rate" [0 0.01 0.2]]</paramSpec>
+        <paramSpec>["polluting-rate" [0 1 5]]</paramSpec>
+        <paramSpec>["planting-rate" [0 0.01 0.1]]</paramSpec>
+    </searchSpace>
+    <searchMethod type="RandomSearch"/>
+    <chromosomeRepresentation type="GrayBinaryChromosome"/>
+    <caching>true</caching>
+    <evaluationLimit>50</evaluationLimit>
+    <bestCheckingNumReplications>0</bestCheckingNumReplications>
+</search>
